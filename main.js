@@ -9,8 +9,9 @@ import error from './movies/mocks/movie-not-found.json'
 
 
 function moviesapp(rootElement) {
-  if(!rootElement)
-  throw new Error('No se encontró el elemento raíz de la aplicación')
+  if (!rootElement)
+    throw new Error('No se encontró el elemento raíz de la aplicación')
+
   rootElement.innerHTML = `
   <div class="container">
     <h1>Mis peliculas</h1>
@@ -19,7 +20,12 @@ function moviesapp(rootElement) {
 `
 
 
-  const btn = rootElement.querySelector('#search')
+  const form = rootElement.querySelector('#my-form')
+  if (!form) throw new Error ('No existe el botón de id search')
+
+  btn.addEventListener('submit', (e) => {
+    e.preventDefault()
+  })
 }
 
 
