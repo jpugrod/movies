@@ -1,9 +1,11 @@
-import { getMovies } from './helpers/get-movies'
 import viewGrid from './movies/views/grid-movies.html?raw'
 import '@picocss/pico'
 import './style.css'
-import movies from './movies/mocks/movies-for-titles.json'
 import { BASE_URL, APIKEY } from './constants'
+import { showError } from './movies/views/show-error'
+import { fetchMovies } from './helpers/async-await-movies'
+import { renderMovies } from './movies/views/render-movies'
+
 
 
 function moviesapp(rootElement) {
@@ -21,27 +23,20 @@ function moviesapp(rootElement) {
   const form = rootElement.querySelector('#my-form')
   if (!form) throw new Error('No existe el botón de id search')
 
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault()
-    const search = e.target.busca.value.trim()
-    const url = `${BASE_URL}/?i=tt3896198&apikey=${APIKEY}&s=${search}`
-    console.log(url)
-
-    fetch(url)
-      .then((respuesta) => {
-        return respuesta.json()
-      })
-      .then((movies) => {
-        getMovies(movies)
-      })
-
-
-
-
+    const { busca } = form // busca --> HTMLInputElement
+    const url = `${BASE_URL}/?i=tt3896198&apikey=${APIKEY}&s=${busca.value.trim()}`
+    try {
+      form.querySelector('button').setAttribute('aria-busy', true)
+      renderMovies(await fetchMovies(url))
+    } catch (error) {
+      showError(error)
+    } finally {
+      form.querySelector('button').removeAttribute('aria-busy')
+    }
   })
 }
-
-
 
 
 const app = document.querySelector('#app')

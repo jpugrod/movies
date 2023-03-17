@@ -1,6 +1,6 @@
 import {showError} from './show-error'
 
-export function getMovies (moviesValue) {
+export function renderMovies (moviesValue) {
   const {Search, Response, Error= 'Error desconocido'} = moviesValue || {}
  if (Response === 'False' || !Search) {
   showError(Error)
