@@ -1,26 +1,32 @@
+import { getMovies } from './helpers/get-movies'
+import viewGrid from './movies/views/grid-movies.html?raw'
 import '@picocss/pico'
 import './style.css'
 
-import error from './mocks/movies-error.json'
-import movies from './mocks/movies-for-titles.json'
+
+import movies from './movies/mocks/movies-for-titles.json'
+import error from './movies/mocks/movie-not-found.json'
 
 
-function cargarPeliculas (resultado){
-if (resultado.Response === 'True') {
-console.log('ok')
-}else {
-  console.log('No encontradas')
-}
-}
-
-
-
-
-document.querySelector('#app').innerHTML = `
+function moviesapp(rootElement) {
+  if(!rootElement)
+  throw new Error('No se encontró el elemento raíz de la aplicación')
+  rootElement.innerHTML = `
   <div class="container">
     <h1>Mis peliculas</h1>
-    <div class="listado"></div>
+    ${viewGrid}
   </div>
 `
 
-cargarPeliculas(movies)
+
+  const btn = rootElement.querySelector('#search')
+}
+
+
+
+
+const app = document.querySelector('#app')
+
+
+
+moviesapp(app)
