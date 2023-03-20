@@ -1,3 +1,4 @@
+import debounce from 'just-debounce-it'
 import viewGrid from './movies/views/grid-movies.html?raw'
 import '@picocss/pico'
 import './style.css'
@@ -23,6 +24,11 @@ function moviesapp(rootElement) {
   const form = rootElement.querySelector('#my-form')
   if (!form) throw new Error('No existe el botón de id search')
 
+
+
+
+
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault()
     const { busca } = form // busca --> HTMLInputElement
@@ -36,8 +42,20 @@ function moviesapp(rootElement) {
       form.querySelector('button').removeAttribute('aria-busy')
     }
   })
+
+  const miFuncion = debounce(
+    async (e) => {
+      const url = `${BASE_URL}/?i=tt3896198&apikey=${APIKEY}&s=${e.target.value.trim()}`
+      renderMovies(await fetchMovies(url))
+    },
+    300
+  )
+
+  form.addEventListener('input', miFuncion)
+
+
 }
 
 
 const app = document.querySelector('#app')
-moviesapp(app)
+moviesapp(app) 
